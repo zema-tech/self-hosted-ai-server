@@ -1,0 +1,24 @@
+# Ollama models (non committare i pesi)
+*.gguf
+*.bin
+*.safetensors
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Docker volumes (se esportati)
+ollama_data/

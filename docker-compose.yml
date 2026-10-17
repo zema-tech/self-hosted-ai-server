@@ -1,0 +1,22 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      # Limita un po' le risorse se vuoi
+      # - OLLAMA_NUM_PARALLEL=1
+    # Su server con poca RAM puoi aggiungere limits:
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 14G
+    #       cpus: '3.5'
+
+volumes:
+  ollama_data:
