@@ -1,28 +1,19 @@
-# Modelli e container (non committare mai i pesi)
 *.gguf
 *.safetensors
 *.bin
 models/
 containers/
 *.coli
-
-# Build artifacts
 *.o
 *.a
 coli
 ds4
-ds4-server
-
-# Environment
+llama-server
+llama-cli
 .env
 .env.*
-
-# Logs
 *.log
 logs/
-
-# OS / IDE
 .DS_Store
 .vscode/
 .idea/
-*.swp

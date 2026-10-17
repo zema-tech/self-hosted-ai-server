@@ -1,39 +1,32 @@
 #!/bin/bash
-echo "=== Check hardware per self-hosted AI (stile Colibrì/ds4) ==="
+echo "=== Hardware check — Qwen 27-35B stile Colibrì/ds4 ==="
 echo
 
-# RAM
 if command -v free >/dev/null; then
-  echo "--- Memoria ---"
+  echo "--- RAM ---"
   free -h
   echo
 fi
 
-# Disco
 echo "--- Disco ---"
 df -h / 2>/dev/null || df -h
 echo
 
-# CPU
 echo "--- CPU ---"
-if command -v nproc >/dev/null; then
-  echo "Core logici: $(nproc)"
-fi
-if [ -f /proc/cpuinfo ]; then
-  grep -m1 "model name" /proc/cpuinfo || true
-fi
+command -v nproc >/dev/null && echo "Core: $(nproc)"
+[ -f /proc/cpuinfo ] && grep -m1 "model name" /proc/cpuinfo || true
 echo
 
-# Spazio libero approssimativo
-FREE_GB=$(df -BG / 2>/dev/null | awk 'NR==2 {print $4}' | tr -d 'G' || echo "?")
-echo "Spazio libero su / : ~${FREE_GB} GB"
+FREE_GB=$(df -BG / 2>/dev/null | awk 'NR==2 {gsub(/G/,"",$4); print $4}' || echo "?")
+echo "Spazio libero su / ≈ ${FREE_GB} GB"
 echo
 
 if [ "$FREE_GB" != "?" ] && [ "$FREE_GB" -lt 25 ]; then
-  echo "ATTENZIONE: meno di 25 GB liberi."
-  echo "Colibrì richiede almeno ~22 GB per i modelli più piccoli."
-  echo "I modelli grandi (DeepSeek, GLM) non entreranno comunque."
+  echo "⚠  Meno di 25 GB liberi: Qwen3.6-35B-A3B (~23 GB) potrebbe non entrare."
+  echo "   Considera quant dense Q3 (~12 GB) o libera spazio."
 fi
 
 echo
-echo "Consiglio: parti da OLMoE o Qwen3.6-35B-A3B se il disco lo permette."
+echo "Raccomandazione:"
+echo "  1) MoE  → Colibrì + Qwen3.6-35B-A3B  (metodo streaming expert)"
+echo "  2) Dense → llama.cpp + Qwen3.8-27B Q3/IQ3 + mmap"
